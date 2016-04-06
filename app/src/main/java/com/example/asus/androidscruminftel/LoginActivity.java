@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -23,15 +24,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
+        findViewById(R.id.sign_in_button).setOnClickListener(this);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
-        AndroidScrumINFTELActivity.mGoogleApiClient = new GoogleApiClient.Builder(this)
+        AndroidScrumINFTELActivity.getInstance().setmGoogleApiClient(new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+                .build());
+
     }
 
     @Override
@@ -50,7 +53,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(AndroidScrumINFTELActivity.mGoogleApiClient);
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(AndroidScrumINFTELActivity.getInstance().getmGoogleApiClient());
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -76,6 +79,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             startActivity(intent);
 
         } else {
+
+            Toast.makeText(getApplicationContext(),R.string.common_google_play_services_sign_in_failed_text,Toast.LENGTH_SHORT);
 
         }
     }
