@@ -7,7 +7,6 @@
 
     <string name="action_settings">Settings</string>
 
-
     <string-array name="status_arrays">
         <item>1</item>
         <item>2</item>
@@ -18,4 +17,16 @@
         <item>7</item>
         <item>8</item>
     </string-array>
+
+    <string name="action_gcm_register">Notification Enabled</string>
+    <string name="action_gcm_unregister">Disable Notifications</string>
+    <string name="action_sign_out">Sign out from project</string>
+    <string name="projectId">ProjectId</string>
+    <string name="notificationsEnabled">Notifications Enabled</string>
+    <string name="notificationDisabled">Notification Disabled</string>
+    <string name="ListChat">Chat List</string>
+    <string name="projectName">Project Name</string>
+    <string name="title_activity_chat">Chat</string>
+    <string name="send_message">Send</string>
+    <string name="action_save">Guardar</string>
 </resources>

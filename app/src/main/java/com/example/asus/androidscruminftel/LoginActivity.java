@@ -1,10 +1,6 @@
 package com.example.asus.androidscruminftel;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,17 +14,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import org.apache.http.params.HttpParams;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import com.example.asus.androidscruminftel.PostHttp;
-import model.User;
+import com.example.asus.androidscruminftel.model.User;
 
 public class LoginActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks,
@@ -94,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
+            AndroidScrumINFTELActivity.getInstance().setUserName(acct.getDisplayName());
             Log.i("es", acct.getEmail());
 //(String email, String idusuario, String nombre, String refreshToken)
 

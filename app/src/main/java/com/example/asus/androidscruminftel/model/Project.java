@@ -1,4 +1,4 @@
-package model;
+package com.example.asus.androidscruminftel.model;
 
 
 import java.sql.Date;

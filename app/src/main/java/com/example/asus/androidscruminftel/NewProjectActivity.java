@@ -1,14 +1,16 @@
 package com.example.asus.androidscruminftel;
 
+import android.app.ActionBar;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -26,13 +28,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
-import model.Project;
+import com.example.asus.androidscruminftel.model.Project;
 
 public class NewProjectActivity extends AppCompatActivity {
 
@@ -53,6 +51,9 @@ public class NewProjectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_project);
 
+        android.support.v7.app.ActionBar toolbar = getSupportActionBar();
+        toolbar.setDisplayHomeAsUpEnabled(true);
+
         arrText = new String[nestados];
         for(int i=0; i<nestados;i++){
             arrText[i]= "Estado 1";
@@ -69,6 +70,23 @@ public class NewProjectActivity extends AppCompatActivity {
         addListenerOnSpinnerItemSelection();
         addListenerOnButton();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_create, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id=item.getItemId();
+        //Mediante getItem se obtiene el vlaor del botn pulsado
+        switch (id){
+            case R.id.action_save:
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void addListenerOnSpinnerItemSelection() {
