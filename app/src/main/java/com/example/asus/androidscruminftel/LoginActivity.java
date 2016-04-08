@@ -1,6 +1,10 @@
 package com.example.asus.androidscruminftel;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,11 +18,28 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
+import org.apache.http.params.HttpParams;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import com.example.asus.androidscruminftel.PostHttp;
+import model.User;
+
+public class LoginActivity extends AppCompatActivity implements
+        GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks,
+        View.OnClickListener{
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
 
+    private String userJson;
+    //String stringUrl = "http://192.168.183.24:8080/AppInftelScrum/webresources/entity.usuarioscrum";
+    String stringUrl = "http://192.168.1.147:443/sigin";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,16 +94,39 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
+            Log.i("es", acct.getEmail());
+//(String email, String idusuario, String nombre, String refreshToken)
+
+            String urlImage;
+
+            if(acct.getPhotoUrl()==null){
+                urlImage="";
+            } else{
+                urlImage=acct.getPhotoUrl().toString();
+            }
+
+            Usuario user;
+            user = new Usuario(acct.getDisplayName(), acct.getEmail(), urlImage);
+            userJson = user.toJSON();
+
+            new PostHttp(getBaseContext()).execute(stringUrl,userJson.toString());
 
             Intent intent = new Intent(this,MyProjectsActivity.class);
             startActivity(intent);
 
         } else {
-
             Toast.makeText(getApplicationContext(),R.string.common_google_play_services_sign_in_failed_text,Toast.LENGTH_SHORT);
-
         }
     }
 
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
 
 }

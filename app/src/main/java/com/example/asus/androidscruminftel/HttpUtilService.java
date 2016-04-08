@@ -16,7 +16,7 @@ import java.net.URL;
 public class HttpUtilService extends Service {
 
     private String userJson;
-
+    private String myurl="http://localhost:443/sigin";// = "http://192.168.183.24
     public HttpUtilService() {
     }
 
@@ -74,5 +74,4 @@ public class HttpUtilService extends Service {
             return "";
         }
     }
-
 }
