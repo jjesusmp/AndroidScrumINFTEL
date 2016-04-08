@@ -105,8 +105,8 @@ public class LoginActivity extends AppCompatActivity implements
                 urlImage=acct.getPhotoUrl().toString();
             }
 
-            Usuario user;
-            user = new Usuario(acct.getDisplayName(), acct.getEmail(), urlImage);
+            User user;
+            user = new User(acct.getDisplayName(), acct.getEmail(), urlImage);
             userJson = user.toJSON();
 
             new PostHttp(getBaseContext()).execute(stringUrl,userJson.toString());

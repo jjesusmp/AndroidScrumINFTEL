@@ -7,58 +7,51 @@ import org.json.JSONObject;
  * Created by Asus on 06/04/2016.
  */
 public class User {
-    private String email;
-    private String idusuario;
-    private String nombre;
-    private String refreshToken;
+    private String userName;
+    private String userEmail;
+    private String userImage;
 
-    public User(String email, String idusuario, String nombre, String refreshToken) {
-        this.email = email;
-        this.idusuario = idusuario;
-        this.nombre = nombre;
-        this.refreshToken = refreshToken;
+    public String getUserName() {
+        return userName;
     }
 
-    public String getNombre() {
-        return nombre;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public String getRefreshToken() {
-        return refreshToken;
+    public void setUserEmail(String email) {
+        this.userEmail = email;
     }
 
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
+
+    public String getUserImage() {
+        return userImage;
     }
 
-    public String getIdusuario() {
-        return idusuario;
+    public void setUserImage(String urlImage) {
+        this.userImage = urlImage;
     }
 
-    public void setIdusuario(String idusuario) {
-        this.idusuario = idusuario;
+
+    public User(String name, String email, String urlImage) {
+
+        this.userName = name;
+        this.userEmail = email;
+        this.userImage = urlImage;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String toJSON(){
 
         JSONObject jsonObject = new JSONObject();
         try{
-            jsonObject.put("email", getEmail());
-            jsonObject.put("idusuario", getIdusuario());
-            jsonObject.put("nombre", getNombre());
-            jsonObject.put("refreshToken", getRefreshToken());
+            jsonObject.put("userName", getUserName());
+            jsonObject.put("userEmail", getUserEmail());
+            jsonObject.put("userImage", getUserImage());
             return jsonObject.toString();
 
 
@@ -72,15 +65,11 @@ public class User {
         try {
             JSONObject jsonObject = new JSONObject(userJson);
 
-            this.nombre = jsonObject.getString("nombre");
-            this.email = jsonObject.getString("email");
-            this.idusuario = jsonObject.getString("idusuario");
-            this.refreshToken = jsonObject.getString("refreshtoken");
-
-
+            this.userName = jsonObject.getString("userName");
+            this.userEmail = jsonObject.getString("userEmail");
+            this.userImage = jsonObject.getString("userImage");
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-
 }

@@ -22,10 +22,6 @@
             android:name=".MyProjectsActivity"
             android:label="@string/title_activity_my_projects"
             android:theme="@style/AppTheme.NoActionBar" />
-        <service
-            android:name=".HttpUtilService"
-            android:enabled="true"
-            android:exported="true"></service>
         <activity android:name=".NewProjectActivity">
 
         </activity>

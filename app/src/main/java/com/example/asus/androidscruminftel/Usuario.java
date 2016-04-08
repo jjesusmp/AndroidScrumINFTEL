@@ -8,7 +8,7 @@ import org.json.JSONObject;
 public class Usuario {
 
 
-     private String userName;
+   private String userName;
     private String userEmail;
     private String userImage;
 
