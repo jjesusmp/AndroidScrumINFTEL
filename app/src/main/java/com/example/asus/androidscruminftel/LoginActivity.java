@@ -81,6 +81,7 @@ public class LoginActivity extends AppCompatActivity implements
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             AndroidScrumINFTELActivity.getInstance().setUserName(acct.getDisplayName());
+            AndroidScrumINFTELActivity.getInstance().setEmail(acct.getEmail());
             Log.i("es", acct.getEmail());
 //(String email, String idusuario, String nombre, String refreshToken)
 

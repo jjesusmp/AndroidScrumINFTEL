@@ -3,6 +3,7 @@ package com.example.asus.androidscruminftel.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -62,7 +63,18 @@ public class ProjectChat implements Parcelable{
         dest.writeString(projectName);
     }
 
-    public static ProjectChat fromJSON(JSONObject jsonObject){
-        return new ProjectChat();
+    public static ProjectChat fromJSON(String object) {
+
+        ProjectChat pc = new ProjectChat();
+
+        try {
+            JSONObject json = new JSONObject(object);
+            pc.setProjectId(json.getString("_id"));
+            pc.setProjectName(json.getString("nombre"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return pc;
     }
 }

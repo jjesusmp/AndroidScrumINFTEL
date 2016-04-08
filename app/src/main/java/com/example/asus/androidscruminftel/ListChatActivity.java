@@ -8,19 +8,25 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.asus.androidscruminftel.fragment.ListChatFragment;
 import com.example.asus.androidscruminftel.fragment.LoadingFragment;
+import com.example.asus.androidscruminftel.interfaces.ServiceListener;
 import com.example.asus.androidscruminftel.model.ProjectChat;
+import com.example.asus.androidscruminftel.service.ChatListService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
-public class ListChatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ListChatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ServiceListener {
 
     ArrayList<ProjectChat> chatList;
+    ChatListService chatservice;
+
 
 
     @Override
@@ -45,7 +51,10 @@ public class ListChatActivity extends AppCompatActivity implements NavigationVie
         LoadingFragment loadingFragment = new LoadingFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.frame_listchat, loadingFragment).commit();
 
-        showListChatFragment(chatList);
+        chatservice = new ChatListService(this);
+        chatservice.getListChat(AndroidScrumINFTELActivity.getInstance().getEmail());
+
+        //showListChatFragment(chatList);
 
     }
 
@@ -139,5 +148,10 @@ public class ListChatActivity extends AppCompatActivity implements NavigationVie
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.coordinatorLayout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onServiceResponse(ArrayList<ProjectChat> response) {
+        showListChatFragment(response);
     }
 }

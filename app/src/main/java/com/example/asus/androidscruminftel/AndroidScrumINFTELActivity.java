@@ -10,7 +10,15 @@ public class AndroidScrumINFTELActivity extends Application {
     private GoogleApiClient mGoogleApiClient;
     private static AndroidScrumINFTELActivity mInstance;
     private String userName;
+    private String email;
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getUserName() {
         return userName;

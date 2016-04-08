@@ -151,6 +151,7 @@ public class NewProjectActivity extends AppCompatActivity {
                     //jsonObject.put("fecha_inicio")
                     jsonObject.put("id_proyecto", 1);
 
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
