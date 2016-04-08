@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.asus.androidscruminftel.connection.PostHttp;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,7 +36,8 @@ import model.Project;
 
 public class NewProjectActivity extends AppCompatActivity {
 
-    String url = "http://192.168.1.136:8080/AppInftelScrum/webresources/entity.proyectoscrum";
+    //String url = "http://192.168.1.136:8080/AppInftelScrum/webresources/entity.proyectoscrum";
+    String url = "http://192.168.1.147:443/newProject";
 
     private Project project;
     private Spinner spinner1;
@@ -116,7 +118,17 @@ public class NewProjectActivity extends AppCompatActivity {
                     jsonObject.put("nombre", project.getName());
                     jsonObject.put("descripcion", project.getDescription());
                     jsonObject.put("id_admin", "jjaldoasenjo@gmail.com");
-                    jsonObject.put("estados", project.getEstados());
+
+                    JSONObject jsonObject1 = new JSONObject();
+                    JSONArray state = new JSONArray();
+                    for(int i=0;i<nestados;i++) {
+                        jsonObject1.put("nombre",arrTemp[i]);
+                        jsonObject1.put("posicion", i);
+                        state.put(i,jsonObject1);
+
+                    }
+
+                    jsonObject.put("estados", state);
                     jsonObject.put("chat", "");
                     //jsonObject.put("fecha_inicio")
                     jsonObject.put("id_proyecto", 1);
