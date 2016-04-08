@@ -1,5 +1,6 @@
 package com.example.asus.androidscruminftel;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.asus.androidscruminftel.connection.PostHttp;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,6 +35,8 @@ import model.Project;
 
 public class NewProjectActivity extends AppCompatActivity {
 
+    String url = "http://192.168.1.136:8080/AppInftelScrum/webresources/entity.proyectoscrum";
+
     private Project project;
     private Spinner spinner1;
     private TextView textView;
@@ -39,7 +44,7 @@ public class NewProjectActivity extends AppCompatActivity {
     private int nestados = 1;
     private String[] arrText;
     private String[] arrTemp;
-    //private ArrayList<String> arrText2;
+    private ArrayList<String> arrText2 = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +102,30 @@ public class NewProjectActivity extends AppCompatActivity {
                 TextInputEditText textDescriptionProduct = (TextInputEditText) findViewById(R.id.input_descriptionProject);
                 project.setDescription(textDescriptionProduct.getText().toString());
 
-                project.setEstados(arrTemp);//arrTemp
+                //project.setEstados(arrTemp);//arrTemp
+
+
+
+                for(int i=0;i<nestados;i++){
+                    arrText2.add(arrTemp[i]);
+                }
+                project.setEstados(arrText2);
+
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("nombre", project.getName());
+                    jsonObject.put("descripcion", project.getDescription());
+                    jsonObject.put("id_admin", "jjaldoasenjo@gmail.com");
+                    jsonObject.put("estados", project.getEstados());
+                    jsonObject.put("chat", "");
+                    //jsonObject.put("fecha_inicio")
+                    jsonObject.put("id_proyecto", 1);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                new PostHttp(getContext()).execute(url,jsonObject.toString());
             }
 
         });
@@ -222,68 +250,11 @@ public class NewProjectActivity extends AppCompatActivity {
             EditText editText1;
             int ref;
         }
-
-
-    private class UploadProjectClass extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... urls) {
-
-            try {
-                return uploadProject(urls[0]);
-            } catch (IOException e) {
-
-                return null;
-            }
-
-        }
-
-        // onPostExecute displays the results of the AsyncTask.
-        @Override
-        protected void onPostExecute(String json) {
-            // Convert String to json object
-            Toast.makeText(getBaseContext(), "New project", Toast.LENGTH_LONG).show();
-        }
     }
 
-    private String uploadProject(String myurl) throws IOException {
-
-        URL url = new URL("URL!!!!");
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setReadTimeout(10000 /* milliseconds */);
-        conn.setConnectTimeout(15000 /* milliseconds */);
-        conn.setRequestMethod("POST");
-        conn.setDoInput(true);
-        conn.setDoOutput(true);
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setRequestProperty("Accept", "application/json");
-
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("nombre", project.getName());
-            jsonObject.put("descripcion", project.getDescription());
-            jsonObject.put("id_admin", "jjaldoasenjo@gmail.com");
-            jsonObject.put("estados", project.getEstados());
-            jsonObject.put("chat", "");
-            //jsonObject.put("fecha_inicio")
-            jsonObject.put("id_proyecto", 1);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        OutputStreamWriter wr= new OutputStreamWriter(conn.getOutputStream());
-        wr.write(jsonObject.toString());
-        wr.flush();
-        wr.close();
-
-        // Starts the query
-        conn.connect();
-        conn.getResponseCode();
-
-        return "";
-
+    public Context getContext(){
+        return getApplicationContext();
     }
-}
+
 }
 

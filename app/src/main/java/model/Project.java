@@ -2,6 +2,7 @@ package model;
 
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -14,7 +15,7 @@ public class Project {
     int idAdmin;
     Date dateStart;
     String[] chat;
-    String[] estados;
+    ArrayList<String> estados;
 
 
 
@@ -22,7 +23,7 @@ public class Project {
 
     }
 
-    public Project(String name, String description, int idProject, int idAdmin, Date dateStart,String[] chat, String[] estados){
+    public Project(String name, String description, int idProject, int idAdmin, Date dateStart,String[] chat, ArrayList<String> estados){
         this.name = name;
         this.description = description;
         this.idProject = idProject;
@@ -80,11 +81,11 @@ public class Project {
         this.chat = chat;
     }
 
-    public String[] getEstados() {
+    public ArrayList<String> getEstados() {
         return estados;
     }
 
-    public void setEstados(String[] estados) {
+    public void setEstados(ArrayList<String> estados) {
         this.estados = estados;
     }
 
@@ -97,7 +98,7 @@ public class Project {
                 ", idAdmin=" + idAdmin +
                 ", dateStart=" + dateStart +
                 ", chat=" + Arrays.toString(chat) +
-                ", estados=" + Arrays.toString(estados) +
+                ", estados=" + estados +
                 '}';
     }
 }
