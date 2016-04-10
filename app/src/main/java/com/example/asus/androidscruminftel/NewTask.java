@@ -40,12 +40,15 @@ public class NewTask extends AppCompatActivity implements AdapterView.OnItemSele
 
 
         spinner = (Spinner) findViewById(R.id.spinner);
-        List<String> list = new ArrayList<String>();
-        list.add("to do");
-        list.add("doing");
-        list.add("done");
+        ArrayList<String> state;
+        state = new ArrayList<>();
+        state.add(0,"to");
+        state.add(1,"do");
+        state.add(2,"done");
+        state.add(3,"doing");
+        state.add(4,"finish");
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,list);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, state);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
         spinner.setOnItemSelectedListener(this);

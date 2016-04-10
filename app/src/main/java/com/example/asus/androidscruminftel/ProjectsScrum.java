@@ -1,5 +1,6 @@
 package com.example.asus.androidscruminftel;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -19,11 +20,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.asus.androidscruminftel.model.Task;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectsScrum extends AppCompatActivity {
     ViewPager viewPager;
+    ArrayList<String> state;
+    ArrayList<Task> tasks;
 
 
     @Override
@@ -31,6 +36,31 @@ public class ProjectsScrum extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_projects_scrum);
+
+        state = new ArrayList<>();
+        state.add(0,"to");
+        state.add(1,"do");
+        state.add(2,"done");
+        state.add(3,"doing");
+        state.add(4,"finish");
+
+        tasks = new ArrayList<>();
+        Task t1 = new Task("1", "Prueba","Esto solo es una prueba","01:20","01/10/16", "to");
+        Task t2 = new Task("2", "Café","Comprar café","02:30","03/12/15", "do");
+        Task t3 = new Task("3", "Scrum","Hay que hacer la metodologia scrum en todos los proyectos","1:30","01/10/16", "finish");
+        Task t4 = new Task("4", "Master","Ya estamos a punto de acabar el máster","10:30","03/12/15", "to");
+        Task t5 = new Task("5", "Final","es el final del proyecto","01:20","01/10/16", "done");
+        Task t6 = new Task("6", "Clase","La clase es una mierda","02:30","03/12/15", "doing");
+        Task t7 = new Task("6", "Juanje","Juanje me pide ayuda","01:15","11/04/16", "doing");
+
+        tasks.add(0,t1);
+        tasks.add(1,t2);
+        tasks.add(2,t3);
+        tasks.add(3,t4);
+        tasks.add(4,t5);
+        tasks.add(5,t6);
+        tasks.add(6,t7);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +119,8 @@ public class ProjectsScrum extends AppCompatActivity {
     }
 
     //----------------------- subClase ---------------------------------
-    public static class DesignDemoFragment extends Fragment {
+    @SuppressLint("ValidFragment")
+    public class DesignDemoFragment extends Fragment {
         private static final String TAB_POSITION = "tab_position";
         private ProjectsScrum p;
 
@@ -110,63 +141,40 @@ public class ProjectsScrum extends AppCompatActivity {
             return fragment;
         }
 
-        @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             Bundle args = getArguments();
             int position = args.getInt(TAB_POSITION);
 
-            CharSequence status = "";
-            if(position==0){
-                status = "To do";
-            }else if (position ==1){
-                status = "Doing";
-            }else if (position == 2){
-                status = "Done";
-            }
-
-            /*ArrayList<String> items = new ArrayList<String>();
-            String[] it = new String[10];
-            for (int i = 0; i < 10; i++) {
-                it[i] =status + " TÍTULO, item #" + i;
-                //items.add("Tab #" + tabPosition + " item #" + i);
-            }
-
-            String[] it2 = new String[10];
-            for (int i = 0; i < 10; i++) {
-                it2[i] ="Descripcion, item #" + i;
-                //items.add("Tab #" + tabPosition + " item #" + i);
-            }*/
-            String texto = "Había una vez en un lugar de la mancha de cuyo nombre no quiero acordarme...Había una vez en un lugar de la mancha de cuyo nombre no quiero acordarme...Había una vez en un lugar de la mancha de cuyo nombre no quiero acordarme...Había una vez en un lugar de la mancha de cuyo nombre no quiero acordarme...";
-
+            String s = state.get(position);
             List<ExpandableListAdapter.Item> data = new ArrayList<>();
-            for (int i = 0; i<6;i++){
-                ExpandableListAdapter.Item places = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "Tarea del estado "+status + i);
-                places.invisibleChildren = new ArrayList<>();
-                places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, i + "Descripción:" + texto));
-                places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Tiempo Estimado: 2:31:1"));
-                data.add(places);
+            for (Task t: tasks) {
+                if (s.equals(t.getState())){
+                    ExpandableListAdapter.Item places = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, t.getTittle());
+                    places.invisibleChildren = new ArrayList<>();
+                    places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, t.getDescription()));
+                    places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Tiempo Estimado: " + t.getTime()));
+                    places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Fecha de Inicio: " + t.getDate()));
+                    data.add(places);
+                }
             }
 
             View rootView = inflater.inflate(R.layout.fragment_project_view, container, false);
-
-            RecyclerView rv = (RecyclerView) rootView.findViewById(R.id.rv_recycler_view);
-            rv.setHasFixedSize(true);
-            //MyAdapter adapter = new MyAdapter(it, it2);
-            //adapter.setMyProject(p);
+            LinearLayoutManager llm = new LinearLayoutManager(getActivity());
             ExpandableListAdapter exp = new ExpandableListAdapter(data);
             exp.setMyProject(p);
 
+            RecyclerView rv = (RecyclerView) rootView.findViewById(R.id.rv_recycler_view);
+            rv.setHasFixedSize(true);
             rv.setAdapter(exp);
-
-
-            LinearLayoutManager llm = new LinearLayoutManager(getActivity());
             rv.setLayoutManager(llm);
 
 
             return rootView;
         }
     }
+
+    //-----------SubClase--------------------
 
     class DesignDemoPagerAdapter extends FragmentPagerAdapter {
         ProjectsScrum p;
@@ -184,22 +192,12 @@ public class ProjectsScrum extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 4;
+            return state.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            CharSequence status = "";
-            if(position==0){
-                status = "to do";
-            }else if (position ==1){
-                status = "doing";
-            }else if (position == 2){
-                status = "done";
-            }else{
-                status = "Chat";
-            }
-            return status;
+            return state.get(position);
         }
     }
 

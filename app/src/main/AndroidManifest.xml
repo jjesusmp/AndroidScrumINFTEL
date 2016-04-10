@@ -22,7 +22,6 @@
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -59,15 +58,11 @@
             </meta-data>
         </activity>
 
-        <activity android:name=".Task"
-            android:configChanges="orientation|keyboardHidden|screenSize">
-        </activity>
-
         <activity android:name=".NewTask"
             android:configChanges="orientation|keyboardHidden|screenSize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.asus.androidscruminftel.Task">
+                android:value="com.example.asus.androidscruminftel.ProjectsScrum">
             </meta-data>
         </activity>
 
@@ -76,7 +71,6 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
                 <category android:name="com.example.asus.androidscruminftel" />
             </intent-filter>
         </receiver>

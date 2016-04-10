@@ -35,7 +35,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
             mCardView = (CardView) v.findViewById(R.id.card_view);
             mTextView = (TextView) v.findViewById(R.id.tv_text);
-            mTextView2 = (TextView) v.findViewById(R.id.tv_blah);
             rlLayout = (RelativeLayout) v.findViewById(R.id.rlLayout);
         }
 
@@ -70,7 +69,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         holder.rlLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(myProject,Task.class);
+                Intent intent = new Intent(myProject,NewTask.class);
                 intent.putExtra("tittle",tittle[position]);
                 myProject.startActivity(intent);
             }
