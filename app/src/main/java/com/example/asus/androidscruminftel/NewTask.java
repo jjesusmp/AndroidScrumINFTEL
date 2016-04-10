@@ -1,13 +1,14 @@
 package com.example.asus.androidscruminftel;
 
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -17,14 +18,26 @@ import java.util.List;
 public class NewTask extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Spinner spinner;
+    String tittle;
+    String content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
 
-        android.support.v7.app.ActionBar toolbar = getSupportActionBar();
-        toolbar.setDisplayHomeAsUpEnabled(true);
+        Bundle bundle = this.getIntent().getExtras();
+        if(bundle != null){
+            tittle = bundle.getString("tittle");
+            content = bundle.getString("content");
+
+            EditText input_tittle = (EditText) findViewById(R.id.input_tittleTask);
+            EditText input_content = (EditText) findViewById(R.id.input_descriptionTask);
+
+            input_tittle.setText(tittle);
+            input_content.setText(content);
+        }
+
 
         spinner = (Spinner) findViewById(R.id.spinner);
         List<String> list = new ArrayList<String>();

@@ -2,7 +2,6 @@ package com.example.asus.androidscruminftel;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -11,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -32,9 +32,6 @@ public class ProjectsScrum extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_projects_scrum);
 
-        android.support.v7.app.ActionBar toolbar = getSupportActionBar();
-        toolbar.setDisplayHomeAsUpEnabled(true);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,7 +41,7 @@ public class ProjectsScrum extends AppCompatActivity {
             }
         });
 
-        DesignDemoPagerAdapter adapter = new DesignDemoPagerAdapter(getSupportFragmentManager(), this);
+        DesignDemoPagerAdapter adapter = new DesignDemoPagerAdapter(getSupportFragmentManager(), getActivityProject());
         viewPager = (ViewPager)findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
@@ -91,7 +88,7 @@ public class ProjectsScrum extends AppCompatActivity {
         toast.show();
     }
 
-//----------------------- subClase ---------------------------------
+    //----------------------- subClase ---------------------------------
     public static class DesignDemoFragment extends Fragment {
         private static final String TAB_POSITION = "tab_position";
         private ProjectsScrum p;
@@ -144,9 +141,9 @@ public class ProjectsScrum extends AppCompatActivity {
 
             List<ExpandableListAdapter.Item> data = new ArrayList<>();
             for (int i = 0; i<6;i++){
-                ExpandableListAdapter.Item places = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "Tarea del estado "+status);
+                ExpandableListAdapter.Item places = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "Tarea del estado "+status + i);
                 places.invisibleChildren = new ArrayList<>();
-                places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Descripción:" + texto));
+                places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, i + "Descripción:" + texto));
                 places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Tiempo Estimado: 2:31:1"));
                 data.add(places);
             }
@@ -157,8 +154,10 @@ public class ProjectsScrum extends AppCompatActivity {
             rv.setHasFixedSize(true);
             //MyAdapter adapter = new MyAdapter(it, it2);
             //adapter.setMyProject(p);
+            ExpandableListAdapter exp = new ExpandableListAdapter(data);
+            exp.setMyProject(p);
 
-            rv.setAdapter(new ExpandableListAdapter(data));
+            rv.setAdapter(exp);
 
 
             LinearLayoutManager llm = new LinearLayoutManager(getActivity());
@@ -169,8 +168,8 @@ public class ProjectsScrum extends AppCompatActivity {
         }
     }
 
-        class DesignDemoPagerAdapter extends FragmentPagerAdapter {
-            ProjectsScrum p;
+    class DesignDemoPagerAdapter extends FragmentPagerAdapter {
+        ProjectsScrum p;
 
         public DesignDemoPagerAdapter(FragmentManager fm,ProjectsScrum p) {
             super(fm);
@@ -206,5 +205,9 @@ public class ProjectsScrum extends AppCompatActivity {
 
     public Context getContext(){
         return getApplicationContext();
+    }
+
+    public ProjectsScrum getActivityProject(){
+        return this;
     }
 }

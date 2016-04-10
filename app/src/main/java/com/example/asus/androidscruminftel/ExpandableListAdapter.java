@@ -1,10 +1,12 @@
 package com.example.asus.androidscruminftel;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,10 +60,12 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return null;
     }
 
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
 
         final Item item = data.get(position);
+
+
         switch (item.type) {
             case HEADER:
                 final ListHeaderViewHolder itemController = (ListHeaderViewHolder) holder;
@@ -71,10 +75,21 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 itemController.rlLayout.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        Toast.makeText(v.getContext(), "OnLongClick Version :", Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(myProject, NewTask.class);
+                        intent.putExtra("tittle", itemController.header_title.getText());
+
+                        int pos = data.indexOf(itemController.refferalItem);
+                        if(item.invisibleChildren == null) {
+                            intent.putExtra("content", data.get(pos + 1).text);
+                        }else{
+                            intent.putExtra("content", item.invisibleChildren.get(0).text);
+                        }
+                        myProject.startActivity(intent);
                         return true;
                     }
                 });
+
 
                 itemController.rlLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -106,6 +121,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 TextView itemTextView = (TextView) holder.itemView;
                 itemTextView.setText(data.get(position).text);
                 break;
+
         }
 
 
@@ -128,7 +144,8 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public boolean onLongClick(View v) {
-        return false;
+        Toast.makeText(v.getContext(), "OnLongClick Version :", Toast.LENGTH_SHORT).show();
+        return true;
     }
 
     private static class ListHeaderViewHolder extends RecyclerView.ViewHolder {
