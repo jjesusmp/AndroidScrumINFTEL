@@ -1,6 +1,8 @@
 package com.example.asus.androidscruminftel;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,23 +26,41 @@ public class LoginActivity extends AppCompatActivity implements
     private static final int RC_SIGN_IN = 9001;
 
     private String userJson;
-    //String stringUrl = "http://192.168.183.24:8080/AppInftelScrum/webresources/entity.usuarioscrum";
-    String stringUrl = "http://192.168.1.147:443/sigin";
+    private SharedPreferences sharedPref;
+    String stringUrl = "http://192.168.1.148:8080/sigin";
+    //String stringUrl = "http://secureuma.no-ip.org:8080/sigin";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_login);
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
+        sharedPref =  getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        String email = sharedPref.getString("email", "");
+        String username = sharedPref.getString("username", "");
+        if (!email.equals("")) {
+            AndroidScrumINFTELActivity.getInstance().setEmail(email);
+            AndroidScrumINFTELActivity.getInstance().setUserName(username);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
+            Intent intent = new Intent(this,MyProjectsActivity.class);
+            startActivity(intent);
 
-        AndroidScrumINFTELActivity.getInstance().setmGoogleApiClient(new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build());
+        }else{
+
+
+
+
+            setContentView(R.layout.activity_login);
+            findViewById(R.id.sign_in_button).setOnClickListener(this);
+
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build();
+
+            AndroidScrumINFTELActivity.getInstance().setmGoogleApiClient(new GoogleApiClient.Builder(this)
+                    .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build());
+        }
+
     }
 
     @Override
@@ -81,6 +101,12 @@ public class LoginActivity extends AppCompatActivity implements
             GoogleSignInAccount acct = result.getSignInAccount();
             AndroidScrumINFTELActivity.getInstance().setUserName(acct.getDisplayName());
             AndroidScrumINFTELActivity.getInstance().setEmail(acct.getEmail());
+            if(acct.getPhotoUrl() == null){
+                AndroidScrumINFTELActivity.getInstance().setPhotoUrl("http://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png");
+            }else {
+                AndroidScrumINFTELActivity.getInstance().setPhotoUrl(acct.getPhotoUrl().toString());
+            }
+
             Log.i("es", acct.getEmail());
 //(String email, String idusuario, String nombre, String refreshToken)
 
@@ -96,13 +122,20 @@ public class LoginActivity extends AppCompatActivity implements
             user = new User(acct.getDisplayName(), acct.getEmail(), urlImage);
             userJson = user.toJSON();
 
+            sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+
+            editor.putString("email", acct.getEmail());
+            editor.putString("username", acct.getDisplayName());
+            editor.commit();
+
             new PostHttp(getBaseContext()).execute(stringUrl,userJson.toString());
 
             Intent intent = new Intent(this,MyProjectsActivity.class);
             startActivity(intent);
 
         } else {
-            Toast.makeText(getApplicationContext(),R.string.common_google_play_services_sign_in_failed_text,Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), R.string.common_google_play_services_sign_in_failed_text, Toast.LENGTH_SHORT);
         }
     }
 

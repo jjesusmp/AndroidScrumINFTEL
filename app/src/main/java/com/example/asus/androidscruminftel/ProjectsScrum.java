@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.asus.androidscruminftel.model.Project;
 import com.example.asus.androidscruminftel.model.Task;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class ProjectsScrum extends AppCompatActivity {
     ViewPager viewPager;
     ArrayList<String> state;
     ArrayList<Task> tasks;
+    Project project;
 
 
     @Override
@@ -37,36 +39,48 @@ public class ProjectsScrum extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_projects_scrum);
 
+        Bundle bundle = this.getIntent().getExtras();
+        if(bundle != null) {
+            project = (Project) bundle.get("project");
+        }
+
+        project = AndroidScrumINFTELActivity.getInstance().getProject();
+
         state = new ArrayList<>();
-        state.add(0,"to");
+        for (int i=0; i<project.getEstados().size();i++){
+            state.add(i,project.getEstados().get(i).getNombre());
+        }
+
+
+        /*state.add(0,"to");
         state.add(1,"do");
         state.add(2,"done");
         state.add(3,"doing");
-        state.add(4,"finish");
+        state.add(4,"finish");*/
 
         tasks = new ArrayList<>();
         Task t1 = new Task("1", "Prueba","Esto solo es una prueba","01:20","01/10/16", "to");
-        Task t2 = new Task("2", "Café","Comprar café","02:30","03/12/15", "do");
+        /*Task t2 = new Task("2", "Café","Comprar café","02:30","03/12/15", "do");
         Task t3 = new Task("3", "Scrum","Hay que hacer la metodologia scrum en todos los proyectos","1:30","01/10/16", "finish");
         Task t4 = new Task("4", "Master","Ya estamos a punto de acabar el máster","10:30","03/12/15", "to");
         Task t5 = new Task("5", "Final","es el final del proyecto","01:20","01/10/16", "done");
         Task t6 = new Task("6", "Clase","La clase es una mierda","02:30","03/12/15", "doing");
-        Task t7 = new Task("6", "Juanje","Juanje me pide ayuda","01:15","11/04/16", "doing");
+        Task t7 = new Task("6", "Juanje","Juanje me pide ayuda","01:15","11/04/16", "doing");*/
 
         tasks.add(0,t1);
-        tasks.add(1,t2);
+        /*tasks.add(1,t2);
         tasks.add(2,t3);
         tasks.add(3,t4);
         tasks.add(4,t5);
         tasks.add(5,t6);
-        tasks.add(6,t7);
+        tasks.add(6,t7);*/
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(),NewTask.class);
+                Intent intent = new Intent(getContext(),NewTaskActivity.class);
                 startActivity(intent);
             }
         });
@@ -155,6 +169,7 @@ public class ProjectsScrum extends AppCompatActivity {
                     places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, t.getDescription()));
                     places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Tiempo Estimado: " + t.getTime()));
                     places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Fecha de Inicio: " + t.getDate()));
+                    places.invisibleChildren.add( new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, t.getId()));
                     data.add(places);
                 }
             }

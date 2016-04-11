@@ -34,7 +34,7 @@ public class ChatListService {
     }
 
     public void getListChat(String user){
-        String url = "http://192.168.1.147:443/getProjectByUser/"+user;
+        String url = "http://192.168.1.148:8080/getProjectByUser/"+user;
         new GetChatListTask().execute(url);
 
     }
@@ -59,22 +59,26 @@ public class ChatListService {
 
             JSONArray json = null;
             try {
-                 json = new JSONArray(result);
+                json = new JSONArray(result);
+                for(int i = 0; i<json.length();i++){
+
+                    try {
+                        ProjectChat pc = ProjectChat.fromJSON(json.getString(i));
+                        chatList.add(pc);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            for(int i = 0; i<json.length();i++){
 
-                try {
-                    ProjectChat pc = ProjectChat.fromJSON(json.getString(i));
-                    chatList.add(pc);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            if(!chatList.isEmpty()){
+                listener.onServiceResponse(chatList);
+            }else{
+                listener.onServiceNoResponse(result);
             }
-
-            listener.onServiceResponse(chatList);
 
         }
 

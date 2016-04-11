@@ -1,6 +1,7 @@
 package com.example.asus.androidscruminftel;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,18 +12,23 @@ import android.support.v7.widget.Toolbar;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.asus.androidscruminftel.fragment.ListChatFragment;
 import com.example.asus.androidscruminftel.fragment.LoadingFragment;
+import com.example.asus.androidscruminftel.interfaces.ImageLoaderListener;
 import com.example.asus.androidscruminftel.interfaces.ServiceListener;
 import com.example.asus.androidscruminftel.model.ProjectChat;
 import com.example.asus.androidscruminftel.service.ChatListService;
+import com.example.asus.androidscruminftel.service.ImageLoaderService;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ListChatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ServiceListener {
+public class ListChatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ServiceListener,ImageLoaderListener {
 
     ArrayList<ProjectChat> chatList;
     ChatListService chatservice;
@@ -53,6 +59,9 @@ public class ListChatActivity extends AppCompatActivity implements NavigationVie
 
         chatservice = new ChatListService(this);
         chatservice.getListChat(AndroidScrumINFTELActivity.getInstance().getEmail());
+
+        ImageLoaderService imageLoaderService = new ImageLoaderService(this,this);
+        imageLoaderService.execute(AndroidScrumINFTELActivity.getInstance().getPhotoUrl());
 
         //showListChatFragment(chatList);
 
@@ -153,5 +162,23 @@ public class ListChatActivity extends AppCompatActivity implements NavigationVie
     @Override
     public void onServiceResponse(ArrayList<ProjectChat> response) {
         showListChatFragment(response);
+    }
+
+    @Override
+    public void onImageLoaded(Drawable drawable) {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        RoundedImageView imageView = (RoundedImageView) navigationView.getHeaderView(0).findViewById(R.id.profileImage);
+        imageView.setImageDrawable(drawable);
+        TextView nameView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.userNameSideBar);
+        TextView mailView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.userEmailSideBar);
+        nameView.setText(AndroidScrumINFTELActivity.getInstance().getUserName());
+        mailView.setText(AndroidScrumINFTELActivity.getInstance().getEmail());
+    }
+
+    @Override
+    public void onServiceNoResponse(String result) {
+        Toast.makeText(getApplicationContext(), "Default Chat List Charged", Toast.LENGTH_SHORT).show();
+        chargeDefaultChatList();
+        showListChatFragment(chatList);
     }
 }

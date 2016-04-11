@@ -1,6 +1,13 @@
 package com.example.asus.androidscruminftel.model;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,19 +15,50 @@ import java.util.Arrays;
 /**
  * Created by Asus on 06/04/2016.
  */
-public class Project {
+public class Project implements Parcelable {
     String id;
     String name;
     String description;
     int idProject;
     int idAdmin;
-    Date dateStart;
+    String dateStart;
     String[] chat;
-    ArrayList<String> estados;
+    ArrayList<State> estados;
     ArrayList<Task> tasks;
-
+    ArrayList<String> sta;
     public Project(){
 
+    }
+
+
+    protected Project(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        description = in.readString();
+        idProject = in.readInt();
+        idAdmin = in.readInt();
+        dateStart = in.readString();
+        chat = in.createStringArray();
+    }
+
+    public static final Creator<Project> CREATOR = new Creator<Project>() {
+        @Override
+        public Project createFromParcel(Parcel in) {
+            return new Project(in);
+        }
+
+        @Override
+        public Project[] newArray(int size) {
+            return new Project[size];
+        }
+    };
+
+    public ArrayList<String> getSta() {
+        return sta;
+    }
+
+    public void setSta(ArrayList<String> sta) {
+        this.sta = sta;
     }
 
     public String getName(){
@@ -55,11 +93,11 @@ public class Project {
         this.idAdmin = idAdmin;
     }
 
-    public Date getDateStart() {
+    public String getDateStart() {
         return dateStart;
     }
 
-    public void setDateStart(Date dateStart) {
+    public void setDateStart(String dateStart) {
         this.dateStart = dateStart;
     }
 
@@ -71,11 +109,11 @@ public class Project {
         this.chat = chat;
     }
 
-    public ArrayList<String> getEstados() {
+    public ArrayList<State> getEstados() {
         return estados;
     }
 
-    public void setEstados(ArrayList<String> estados) {
+    public void setEstados(ArrayList<State> estados) {
         this.estados = estados;
     }
 
@@ -131,5 +169,49 @@ public class Project {
                 ", estados=" + estados +
                 ", tasks=" + tasks +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeInt(idProject);
+        dest.writeInt(idAdmin);
+        dest.writeString(dateStart);
+        dest.writeStringArray(chat);
+    }
+
+
+    public static Project fromJSON(String response) throws JSONException {
+
+        Project proyect = new Project();
+        JSONObject jsonObject = new JSONObject(response);
+        proyect.setName(jsonObject.getString("nombre"));
+        proyect.setDescription(jsonObject.getString("descripcion"));
+
+        JSONArray jsonArray = jsonObject.getJSONArray("estados");
+        ArrayList<State> states = new ArrayList<>();
+        ArrayList<String>st = new ArrayList<>();
+        for (int i =0; i<jsonArray.length();i++){
+            State state = new State();
+            state.setNombre(jsonArray.getJSONObject(i).getString("nombre"));
+            state.setPosicion(jsonArray.getJSONObject(i).getString("posicion"));
+            st.add(i,jsonArray.getJSONObject(i).getString("nombre"));
+            states.add(i,state);
+        }
+
+        proyect.setId(jsonObject.getString("_id"));
+        proyect.setSta(st);
+        proyect.setEstados(states);
+        proyect.setDateStart("date");
+
+        return proyect;
     }
 }

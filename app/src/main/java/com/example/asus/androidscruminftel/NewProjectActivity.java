@@ -2,6 +2,7 @@ package com.example.asus.androidscruminftel;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,13 +30,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.example.asus.androidscruminftel.model.Project;
 
 public class NewProjectActivity extends AppCompatActivity {
 
     //String url = "http://192.168.1.136:8080/AppInftelScrum/webresources/entity.proyectoscrum";
-    String url = "http://192.168.1.147:443/newProject";
+    String url = "http://192.168.1.148:8080/newProject";
+    //String url = "http://secureuma.no-ip.org:8080/newProject";
 
     private Project project;
     private Spinner spinner1;
@@ -45,6 +48,7 @@ public class NewProjectActivity extends AppCompatActivity {
     private String[] arrText;
     private String[] arrTemp;
     private ArrayList<String> arrText2 = new ArrayList<>();
+    private boolean vacio=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +71,9 @@ public class NewProjectActivity extends AppCompatActivity {
 
         project = new Project();
 
+
         addListenerOnSpinnerItemSelection();
-        addListenerOnButton();
+        //addListenerOnButton();
 
     }
 
@@ -84,6 +89,84 @@ public class NewProjectActivity extends AppCompatActivity {
         //Mediante getItem se obtiene el vlaor del botn pulsado
         switch (id){
             case R.id.action_save:
+
+
+//                Toast.makeText(NewProjectActivity.this,
+//                        "OnClickListener : " +
+//                                "\nSpinner 1 : " + String.valueOf(spinner1.getSelectedItem()),
+//                        Toast.LENGTH_SHORT).show();
+
+
+
+                TextInputEditText textName = (TextInputEditText) findViewById(R.id.input_nameProject);
+                project.setName(textName.getText().toString());
+
+                TextInputEditText textDescription = (TextInputEditText) findViewById(R.id.input_descriptionProject);
+                project.setDescription(textDescription.getText().toString());
+
+                //project.setEstados(arrTemp);//arrTemp
+
+
+
+                for(int i=0;i<nestados;i++){
+                    arrText2.add(arrTemp[i]);
+                    //System.out.println("ESTADO "+arrTemp[i]);
+                    if(arrTemp[i]==null && vacio==false){
+                        vacio=true;
+                    }else if(arrTemp[i].equals("") && vacio==false){
+                        vacio=true;
+                    }
+                }
+
+
+
+                if (textName.getText().toString().equals("") | textDescription.getText().toString().equals("") |
+                        vacio==true){
+                    CharSequence text = "Debes completar todos los campos!";
+                    Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+                    vacio=false;
+                }else {
+
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("nombre", project.getName());
+                        jsonObject.put("descripcion", project.getDescription());
+                        jsonObject.put("admin", AndroidScrumINFTELActivity.getInstance().getEmail());
+
+
+                        List<String> usuarios = new ArrayList<>();
+                        usuarios.add(0,AndroidScrumINFTELActivity.getInstance().getEmail());
+                        jsonObject.put("usuarios",AndroidScrumINFTELActivity.getInstance().getEmail());
+
+
+
+
+                        JSONArray state = new JSONArray();
+                        for (int i = 0; i < nestados; i++) {
+                            JSONObject jsonObject1 = new JSONObject();
+                            jsonObject1.put("nombre", arrTemp[i]);
+                            jsonObject1.put("posicion", i);
+                            state.put(i, jsonObject1);
+
+                        }
+
+                        jsonObject.put("estados", state);
+                        jsonObject.put("chat", "");
+                        //jsonObject.put("fecha_inicio")
+                        jsonObject.put("id_proyecto", 1);
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    new PostHttp(getContext()).execute(url, jsonObject.toString());
+
+                    Intent intent = new Intent(this, MyProjectsActivity.class);
+                    startActivity(intent);
+                }
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -95,79 +178,78 @@ public class NewProjectActivity extends AppCompatActivity {
 
     }
 
-    public void addListenerOnButton() {
-
-        spinner1 = (Spinner) findViewById(R.id.spinner1);
-
-
-        btnSubmit = (Button) findViewById(R.id.btnSubmit);
-
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-
-                System.out.println("seleccionado" + spinner1.getSelectedItem());
-                Toast.makeText(NewProjectActivity.this,
-                        "OnClickListener : " +
-                                "\nSpinner 1 : " + String.valueOf(spinner1.getSelectedItem()),
-                        Toast.LENGTH_SHORT).show();
-
-
-
-                TextInputEditText textName = (TextInputEditText) findViewById(R.id.input_nameProject);
-                project.setName(textName.getText().toString());
-
-                TextInputEditText textDescriptionProduct = (TextInputEditText) findViewById(R.id.input_descriptionProject);
-                project.setDescription(textDescriptionProduct.getText().toString());
-
-                //project.setEstados(arrTemp);//arrTemp
-
-
-
-                for(int i=0;i<nestados;i++){
-                    arrText2.add(arrTemp[i]);
-                }
-                project.setEstados(arrText2);
-
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    jsonObject.put("nombre", project.getName());
-                    jsonObject.put("descripcion", project.getDescription());
-                    jsonObject.put("id_admin", "jjaldoasenjo@gmail.com");
-
-                    JSONObject jsonObject1 = new JSONObject();
-                    JSONArray state = new JSONArray();
-                    for(int i=0;i<nestados;i++) {
-                        jsonObject1.put("nombre",arrTemp[i]);
-                        jsonObject1.put("posicion", i);
-                        state.put(i,jsonObject1);
-
-                    }
-
-                    jsonObject.put("estados", state);
-                    jsonObject.put("chat", "");
-                    //jsonObject.put("fecha_inicio")
-                    jsonObject.put("id_proyecto", 1);
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                new PostHttp(getContext()).execute(url,jsonObject.toString());
-            }
-
-        });
-    }
+//    public void addListenerOnButton() {
+//
+//        spinner1 = (Spinner) findViewById(R.id.spinner1);
+//
+//
+//        btnSubmit = (Button) findViewById(R.id.btnSubmit);
+//
+//        btnSubmit.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//
+//
+//                System.out.println("seleccionado" + spinner1.getSelectedItem());
+//                Toast.makeText(NewProjectActivity.this,
+//                        "OnClickListener : " +
+//                                "\nSpinner 1 : " + String.valueOf(spinner1.getSelectedItem()),
+//                        Toast.LENGTH_SHORT).show();
+//
+//
+//
+//                TextInputEditText textName = (TextInputEditText) findViewById(R.id.input_nameProject);
+//                project.setName(textName.getText().toString());
+//
+//                TextInputEditText textDescriptionProduct = (TextInputEditText) findViewById(R.id.input_descriptionProject);
+//                project.setDescription(textDescriptionProduct.getText().toString());
+//
+//                //project.setEstados(arrTemp);//arrTemp
+//
+//
+//
+//                for(int i=0;i<nestados;i++){
+//                    arrText2.add(arrTemp[i]);
+//                }
+//                project.setEstados(arrText2);
+//
+//                JSONObject jsonObject = new JSONObject();
+//                try {
+//                    jsonObject.put("nombre", project.getName());
+//                    jsonObject.put("descripcion", project.getDescription());
+//                    jsonObject.put("id_admin", "jjaldoasenjo@gmail.com");
+//
+//                    JSONObject jsonObject1 = new JSONObject();
+//                    JSONArray state = new JSONArray();
+//                    for(int i=0;i<nestados;i++) {
+//                        jsonObject1.put("nombre",arrTemp[i]);
+//                        jsonObject1.put("posicion", i);
+//                        state.put(i,jsonObject1);
+//
+//                    }
+//
+//                    jsonObject.put("estados", state);
+//                    jsonObject.put("chat", "");
+//                    //jsonObject.put("fecha_inicio")
+//                    jsonObject.put("id_proyecto", 1);
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                new PostHttp(getContext()).execute(url,jsonObject.toString());
+//            }
+//
+//        });
+//    }
 
     public class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
 
         public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
-            Toast.makeText(parent.getContext(),
-                    "OnItemSelectedListener : " + parent.getItemAtPosition(pos).toString(),
-                    Toast.LENGTH_SHORT).show();
+//            Toast.makeText(parent.getContext(),
+//                    "OnItemSelectedListener : " + parent.getItemAtPosition(pos).toString(),
+//                    Toast.LENGTH_SHORT).show();
             nestados=Integer.parseInt(parent.getItemAtPosition(pos).toString());
             System.out.println("ESTADO"+nestados);
 //            TextView textEmpty = (TextView) findViewById(R.id.input_status2);

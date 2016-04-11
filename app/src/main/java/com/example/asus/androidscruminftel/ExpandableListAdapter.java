@@ -76,14 +76,16 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     @Override
                     public boolean onLongClick(View v) {
 
-                        Intent intent = new Intent(myProject, NewTask.class);
+                        Intent intent = new Intent(myProject, NewTaskActivity.class);
                         intent.putExtra("tittle", itemController.header_title.getText());
 
                         int pos = data.indexOf(itemController.refferalItem);
                         if(item.invisibleChildren == null) {
                             intent.putExtra("content", data.get(pos + 1).text);
+                            intent.putExtra("idTask", data.get(pos + 4).text);
                         }else{
                             intent.putExtra("content", item.invisibleChildren.get(0).text);
+                            intent.putExtra("idTask", item.invisibleChildren.get(3).text);
                         }
                         myProject.startActivity(intent);
                         return true;

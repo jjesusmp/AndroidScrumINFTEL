@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -58,12 +59,18 @@
             </meta-data>
         </activity>
 
-        <activity android:name=".NewTask"
+        <activity android:name=".NewTaskActivity"
             android:configChanges="orientation|keyboardHidden|screenSize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.asus.androidscruminftel.ProjectsScrum">
             </meta-data>
+        </activity>
+        <activity
+            android:name=".SendActivity"
+            android:label="@string/title_activity_send"
+            android:theme="@style/AppTheme.NoActionBar">
+
         </activity>
 
         <receiver
