@@ -9,8 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.asus.androidscruminftel.ChatActivity;
 import com.example.asus.androidscruminftel.R;
+import com.example.asus.androidscruminftel.activity.ChatActivity;
 import com.example.asus.androidscruminftel.adapter.RecyclerItemClickListener;
 import com.example.asus.androidscruminftel.adapter.RecyclerViewAdapter;
 import com.example.asus.androidscruminftel.model.ProjectChat;

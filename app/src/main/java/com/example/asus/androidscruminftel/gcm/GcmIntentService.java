@@ -12,9 +12,9 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.example.asus.androidscruminftel.ChatActivity;
 import com.example.asus.androidscruminftel.Constants;
 import com.example.asus.androidscruminftel.R;
+import com.example.asus.androidscruminftel.activity.ChatActivity;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 

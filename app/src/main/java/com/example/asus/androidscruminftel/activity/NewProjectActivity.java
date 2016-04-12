@@ -1,12 +1,10 @@
-package com.example.asus.androidscruminftel;
+package com.example.asus.androidscruminftel.activity;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -14,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -23,7 +22,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.asus.androidscruminftel.AndroidScrumINFTELActivity;
+import com.example.asus.androidscruminftel.R;
 import com.example.asus.androidscruminftel.connection.PostHttp;
+import com.example.asus.androidscruminftel.model.Project;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,8 +33,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.example.asus.androidscruminftel.model.Project;
 
 public class NewProjectActivity extends AppCompatActivity {
 
@@ -55,6 +55,8 @@ public class NewProjectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_project);
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         android.support.v7.app.ActionBar toolbar = getSupportActionBar();
         toolbar.setDisplayHomeAsUpEnabled(true);
 
@@ -70,6 +72,7 @@ public class NewProjectActivity extends AppCompatActivity {
 
 
         project = new Project();
+
 
 
         addListenerOnSpinnerItemSelection();
@@ -90,27 +93,15 @@ public class NewProjectActivity extends AppCompatActivity {
         switch (id){
             case R.id.action_save:
 
-
-//                Toast.makeText(NewProjectActivity.this,
-//                        "OnClickListener : " +
-//                                "\nSpinner 1 : " + String.valueOf(spinner1.getSelectedItem()),
-//                        Toast.LENGTH_SHORT).show();
-
-
-
                 TextInputEditText textName = (TextInputEditText) findViewById(R.id.input_nameProject);
                 project.setName(textName.getText().toString());
 
                 TextInputEditText textDescription = (TextInputEditText) findViewById(R.id.input_descriptionProject);
                 project.setDescription(textDescription.getText().toString());
 
-                //project.setEstados(arrTemp);//arrTemp
-
-
 
                 for(int i=0;i<nestados;i++){
                     arrText2.add(arrTemp[i]);
-                    //System.out.println("ESTADO "+arrTemp[i]);
                     if(arrTemp[i]==null && vacio==false){
                         vacio=true;
                     }else if(arrTemp[i].equals("") && vacio==false){
@@ -152,7 +143,6 @@ public class NewProjectActivity extends AppCompatActivity {
 
                         jsonObject.put("estados", state);
                         jsonObject.put("chat", "");
-                        //jsonObject.put("fecha_inicio")
                         jsonObject.put("id_proyecto", 1);
 
 
@@ -178,93 +168,17 @@ public class NewProjectActivity extends AppCompatActivity {
 
     }
 
-//    public void addListenerOnButton() {
-//
-//        spinner1 = (Spinner) findViewById(R.id.spinner1);
-//
-//
-//        btnSubmit = (Button) findViewById(R.id.btnSubmit);
-//
-//        btnSubmit.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//
-//
-//                System.out.println("seleccionado" + spinner1.getSelectedItem());
-//                Toast.makeText(NewProjectActivity.this,
-//                        "OnClickListener : " +
-//                                "\nSpinner 1 : " + String.valueOf(spinner1.getSelectedItem()),
-//                        Toast.LENGTH_SHORT).show();
-//
-//
-//
-//                TextInputEditText textName = (TextInputEditText) findViewById(R.id.input_nameProject);
-//                project.setName(textName.getText().toString());
-//
-//                TextInputEditText textDescriptionProduct = (TextInputEditText) findViewById(R.id.input_descriptionProject);
-//                project.setDescription(textDescriptionProduct.getText().toString());
-//
-//                //project.setEstados(arrTemp);//arrTemp
-//
-//
-//
-//                for(int i=0;i<nestados;i++){
-//                    arrText2.add(arrTemp[i]);
-//                }
-//                project.setEstados(arrText2);
-//
-//                JSONObject jsonObject = new JSONObject();
-//                try {
-//                    jsonObject.put("nombre", project.getName());
-//                    jsonObject.put("descripcion", project.getDescription());
-//                    jsonObject.put("id_admin", "jjaldoasenjo@gmail.com");
-//
-//                    JSONObject jsonObject1 = new JSONObject();
-//                    JSONArray state = new JSONArray();
-//                    for(int i=0;i<nestados;i++) {
-//                        jsonObject1.put("nombre",arrTemp[i]);
-//                        jsonObject1.put("posicion", i);
-//                        state.put(i,jsonObject1);
-//
-//                    }
-//
-//                    jsonObject.put("estados", state);
-//                    jsonObject.put("chat", "");
-//                    //jsonObject.put("fecha_inicio")
-//                    jsonObject.put("id_proyecto", 1);
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                new PostHttp(getContext()).execute(url,jsonObject.toString());
-//            }
-//
-//        });
-//    }
 
     public class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
 
         public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
-//            Toast.makeText(parent.getContext(),
-//                    "OnItemSelectedListener : " + parent.getItemAtPosition(pos).toString(),
-//                    Toast.LENGTH_SHORT).show();
+
             nestados=Integer.parseInt(parent.getItemAtPosition(pos).toString());
-            System.out.println("ESTADO"+nestados);
-//            TextView textEmpty = (TextView) findViewById(R.id.input_status2);
-//            if(estados.equals("uno")){
-//                textEmpty.setVisibility(View.INVISIBLE);
-//
-//            }else if(estados.equals("dos")){
-//                textEmpty.setVisibility(View.VISIBLE);
-//                textEmpty.setHint("Estado 2");
-//            }
-            //arrText = new String[]{"Estado 1"};
+
             arrText = new String[nestados];
             for(int i=0; i<nestados;i++){
                 arrText[i]= "Estado " + (i+1);
-                //arrText2.add(i, "Estado " + i);
+
 
             }
 
@@ -273,9 +187,6 @@ public class NewProjectActivity extends AppCompatActivity {
             MyListAdapter myListAdapter = new MyListAdapter();
             ListView listView = (ListView) findViewById(R.id.listView);
             listView.setAdapter(myListAdapter);
-
-
-
 
         }
 
@@ -353,7 +264,6 @@ public class NewProjectActivity extends AppCompatActivity {
                     arrTemp[holder.ref] = arg0.toString();
                 }
             });
-
 
             return convertView;
         }

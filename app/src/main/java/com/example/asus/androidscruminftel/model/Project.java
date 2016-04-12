@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -20,23 +19,22 @@ public class Project implements Parcelable {
     String name;
     String description;
     int idProject;
-    int idAdmin;
+    String idAdmin;
     String dateStart;
     String[] chat;
+    ArrayList<String> emailUser;
     ArrayList<State> estados;
-    ArrayList<Task> tasks;
-    ArrayList<String> sta;
+    ArrayList<Tarea> tasks;
     public Project(){
 
     }
-
 
     protected Project(Parcel in) {
         id = in.readString();
         name = in.readString();
         description = in.readString();
         idProject = in.readInt();
-        idAdmin = in.readInt();
+        idAdmin = in.readString();
         dateStart = in.readString();
         chat = in.createStringArray();
     }
@@ -53,13 +51,6 @@ public class Project implements Parcelable {
         }
     };
 
-    public ArrayList<String> getSta() {
-        return sta;
-    }
-
-    public void setSta(ArrayList<String> sta) {
-        this.sta = sta;
-    }
 
     public String getName(){
         return name;
@@ -85,11 +76,11 @@ public class Project implements Parcelable {
         this.idProject = idProject;
     }
 
-    public int getIdAdmin() {
+    public String getIdAdmin() {
         return idAdmin;
     }
 
-    public void setIdAdmin(int idAdmin) {
+    public void setIdAdmin(String idAdmin) {
         this.idAdmin = idAdmin;
     }
 
@@ -117,11 +108,11 @@ public class Project implements Parcelable {
         this.estados = estados;
     }
 
-    public ArrayList<Task> getTasks() {
+    public ArrayList<Tarea> getTasks() {
         return tasks;
     }
 
-    public void setTasks(ArrayList<Task> tasks) {
+    public void setTasks(ArrayList<Tarea> tasks) {
         this.tasks = tasks;
     }
 
@@ -131,6 +122,14 @@ public class Project implements Parcelable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public ArrayList<String> getEmailUser() {
+        return emailUser;
+    }
+
+    public void setEmailUser(ArrayList<String> emailUser) {
+        this.emailUser = emailUser;
     }
 
     @Override
@@ -148,7 +147,6 @@ public class Project implements Parcelable {
             return false;
         if (dateStart != null ? !dateStart.equals(project.dateStart) : project.dateStart != null)
             return false;
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
         if (!Arrays.equals(chat, project.chat)) return false;
         if (estados != null ? !estados.equals(project.estados) : project.estados != null)
             return false;
@@ -183,7 +181,7 @@ public class Project implements Parcelable {
         dest.writeString(name);
         dest.writeString(description);
         dest.writeInt(idProject);
-        dest.writeInt(idAdmin);
+        dest.writeString(idAdmin);
         dest.writeString(dateStart);
         dest.writeStringArray(chat);
     }
@@ -193,22 +191,41 @@ public class Project implements Parcelable {
 
         Project proyect = new Project();
         JSONObject jsonObject = new JSONObject(response);
+
         proyect.setName(jsonObject.getString("nombre"));
         proyect.setDescription(jsonObject.getString("descripcion"));
 
+        ArrayList<String> usuarios = (ArrayList<String>) jsonObject.get("usuarios");
+        proyect.setEmailUser(usuarios);
+
         JSONArray jsonArray = jsonObject.getJSONArray("estados");
         ArrayList<State> states = new ArrayList<>();
-        ArrayList<String>st = new ArrayList<>();
         for (int i =0; i<jsonArray.length();i++){
             State state = new State();
             state.setNombre(jsonArray.getJSONObject(i).getString("nombre"));
             state.setPosicion(jsonArray.getJSONObject(i).getString("posicion"));
-            st.add(i,jsonArray.getJSONObject(i).getString("nombre"));
             states.add(i,state);
         }
 
+        JSONArray taskArray = jsonObject.getJSONArray("tareas");
+        ArrayList<Tarea> tareas  = new ArrayList<>();
+        for (int i =0; i<taskArray.length();i++){
+            Tarea tarea = new Tarea();
+            tarea.setNombre_tarea(taskArray.getJSONObject(i).getString("nombre_tarea"));
+            tarea.setDescripcion(taskArray.getJSONObject(i).getString("descripcion"));
+            tarea.setEstado_tarea(taskArray.getJSONObject(i).getString("estado"));
+            tarea.setFecha_inicio(taskArray.getJSONObject(i).getString("fecha_inicio"));
+            tarea.setTiempo_estimado(taskArray.getJSONObject(i).getString("tiempo_estimado"));
+            tarea.setNombre_usuario(taskArray.getJSONObject(i).getString("nombre_usuario"));
+            tarea.setId_tarea(taskArray.getJSONObject(i).getString("_id"));
+
+            tareas.add(i,tarea);
+
+        }
+
+        proyect.setTasks(tareas);
+        proyect.setIdAdmin(jsonObject.getString("admin"));
         proyect.setId(jsonObject.getString("_id"));
-        proyect.setSta(st);
         proyect.setEstados(states);
         proyect.setDateStart("date");
 

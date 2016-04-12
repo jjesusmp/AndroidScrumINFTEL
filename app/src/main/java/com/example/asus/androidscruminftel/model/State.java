@@ -1,20 +1,11 @@
 package com.example.asus.androidscruminftel.model;
 
 /**
- * Created by aitorpagan on 11/4/16.
+ * Created by aitorpagan on 12/4/16.
  */
 public class State {
-
     private String nombre;
     private String posicion;
-
-    @Override
-    public String toString() {
-        return "State{" +
-                "nombre='" + nombre + '\'' +
-                ", posicion='" + posicion + '\'' +
-                '}';
-    }
 
     public String getNombre() {
         return nombre;
@@ -30,5 +21,13 @@ public class State {
 
     public void setPosicion(String posicion) {
         this.posicion = posicion;
+    }
+
+    @Override
+    public String toString() {
+        return "State{" +
+                "nombre='" + nombre + '\'' +
+                ", posicion='" + posicion + '\'' +
+                '}';
     }
 }

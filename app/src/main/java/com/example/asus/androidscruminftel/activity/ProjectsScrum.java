@@ -1,9 +1,9 @@
-package com.example.asus.androidscruminftel;
+package com.example.asus.androidscruminftel.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.Nullable;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -20,8 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.asus.androidscruminftel.AndroidScrumINFTELActivity;
+import com.example.asus.androidscruminftel.R;
+import com.example.asus.androidscruminftel.adapter.ExpandableListAdapter;
 import com.example.asus.androidscruminftel.model.Project;
-import com.example.asus.androidscruminftel.model.Task;
+import com.example.asus.androidscruminftel.model.Tarea;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +31,7 @@ import java.util.List;
 public class ProjectsScrum extends AppCompatActivity {
     ViewPager viewPager;
     ArrayList<String> state;
-    ArrayList<Task> tasks;
+    ArrayList<Tarea> tasks;
     Project project;
 
 
@@ -45,36 +47,17 @@ public class ProjectsScrum extends AppCompatActivity {
         }
 
         project = AndroidScrumINFTELActivity.getInstance().getProject();
+        this.setTitle(project.getName());
 
         state = new ArrayList<>();
         for (int i=0; i<project.getEstados().size();i++){
             state.add(i,project.getEstados().get(i).getNombre());
         }
 
-
-        /*state.add(0,"to");
-        state.add(1,"do");
-        state.add(2,"done");
-        state.add(3,"doing");
-        state.add(4,"finish");*/
-
         tasks = new ArrayList<>();
-        Task t1 = new Task("1", "Prueba","Esto solo es una prueba","01:20","01/10/16", "to");
-        /*Task t2 = new Task("2", "Café","Comprar café","02:30","03/12/15", "do");
-        Task t3 = new Task("3", "Scrum","Hay que hacer la metodologia scrum en todos los proyectos","1:30","01/10/16", "finish");
-        Task t4 = new Task("4", "Master","Ya estamos a punto de acabar el máster","10:30","03/12/15", "to");
-        Task t5 = new Task("5", "Final","es el final del proyecto","01:20","01/10/16", "done");
-        Task t6 = new Task("6", "Clase","La clase es una mierda","02:30","03/12/15", "doing");
-        Task t7 = new Task("6", "Juanje","Juanje me pide ayuda","01:15","11/04/16", "doing");*/
-
-        tasks.add(0,t1);
-        /*tasks.add(1,t2);
-        tasks.add(2,t3);
-        tasks.add(3,t4);
-        tasks.add(4,t5);
-        tasks.add(5,t6);
-        tasks.add(6,t7);*/
-
+        for (int t =0; t<project.getTasks().size();t++){
+            tasks.add(t,project.getTasks().get(t));
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -90,40 +73,7 @@ public class ProjectsScrum extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
-        //tabLayout.addTab(tabLayout.newTab().setText("to done"));
-        //tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
-        tabLayout.setOnTabSelectedListener(
-                new TabLayout.OnTabSelectedListener() {
-                    @Override
-                    public void onTabSelected(TabLayout.Tab tab) {
-                        viewPager.setCurrentItem(tab.getPosition());
-
-                        switch (tab.getPosition()) {
-                            case 0:
-                                showToast("One");
-                                break;
-                            case 1:
-                                showToast("Two");
-                                break;
-                            case 2:
-                                showToast("Three");
-                                break;
-                        }
-
-                    }
-
-                    @Override
-                    public void onTabUnselected(TabLayout.Tab tab) {
-
-                    }
-
-                    @Override
-                    public void onTabReselected(TabLayout.Tab tab) {
-
-                    }
-                }
-        );
     }
 
     private void showToast(String cadena) {
@@ -162,14 +112,14 @@ public class ProjectsScrum extends AppCompatActivity {
 
             String s = state.get(position);
             List<ExpandableListAdapter.Item> data = new ArrayList<>();
-            for (Task t: tasks) {
-                if (s.equals(t.getState())){
-                    ExpandableListAdapter.Item places = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, t.getTittle());
+            for (Tarea t: tasks) {
+                if (s.equals(t.getEstado_tarea())){
+                    ExpandableListAdapter.Item places = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, t.getNombre_tarea());
                     places.invisibleChildren = new ArrayList<>();
-                    places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, t.getDescription()));
-                    places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Tiempo Estimado: " + t.getTime()));
-                    places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Fecha de Inicio: " + t.getDate()));
-                    places.invisibleChildren.add( new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, t.getId()));
+                    places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, t.getDescripcion()));
+                    places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Tiempo Estimado: " + t.getTiempo_estimado()));
+                    places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Fecha de Inicio: " + t.getFecha_inicio()));
+                    places.invisibleChildren.add( new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, t.getId_tarea()));
                     data.add(places);
                 }
             }

@@ -1,4 +1,4 @@
-package com.example.asus.androidscruminftel;
+package com.example.asus.androidscruminftel.activity;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
@@ -24,6 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.example.asus.androidscruminftel.AndroidScrumINFTELActivity;
+import com.example.asus.androidscruminftel.Constants;
+import com.example.asus.androidscruminftel.R;
+import com.example.asus.androidscruminftel.adapter.ChatAdapter;
 import com.example.asus.androidscruminftel.callbacks.BasicCallback;
 import com.example.asus.androidscruminftel.model.ChatMessage;
 import com.google.android.gms.common.ConnectionResult;

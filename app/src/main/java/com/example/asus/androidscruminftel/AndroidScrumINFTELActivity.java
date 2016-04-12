@@ -1,8 +1,6 @@
 package com.example.asus.androidscruminftel;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 
 import com.example.asus.androidscruminftel.model.Project;
 import com.example.asus.androidscruminftel.model.Tarea;

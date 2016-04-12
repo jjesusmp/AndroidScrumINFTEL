@@ -1,4 +1,4 @@
-package com.example.asus.androidscruminftel;
+package com.example.asus.androidscruminftel.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.asus.androidscruminftel.R;
 import com.example.asus.androidscruminftel.model.ChatMessage;
 
 import java.text.SimpleDateFormat;

@@ -1,4 +1,4 @@
-package com.example.asus.androidscruminftel;
+package com.example.asus.androidscruminftel.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,10 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.asus.androidscruminftel.R;
+import com.example.asus.androidscruminftel.activity.NewTaskActivity;
+import com.example.asus.androidscruminftel.activity.ProjectsScrum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,9 +85,13 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         int pos = data.indexOf(itemController.refferalItem);
                         if(item.invisibleChildren == null) {
                             intent.putExtra("content", data.get(pos + 1).text);
+                            intent.putExtra("time", data.get(pos + 2).text);
+                            intent.putExtra("date", data.get(pos + 3).text);
                             intent.putExtra("idTask", data.get(pos + 4).text);
                         }else{
                             intent.putExtra("content", item.invisibleChildren.get(0).text);
+                            intent.putExtra("time", item.invisibleChildren.get(1).text);
+                            intent.putExtra("date", item.invisibleChildren.get(2).text);
                             intent.putExtra("idTask", item.invisibleChildren.get(3).text);
                         }
                         myProject.startActivity(intent);

@@ -1,41 +1,36 @@
-package com.example.asus.androidscruminftel;
+package com.example.asus.androidscruminftel.activity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.TextView;
 
-import com.example.asus.androidscruminftel.adapter.RecyclerViewProyectsAdapter;
+import com.example.asus.androidscruminftel.AndroidScrumINFTELActivity;
+import com.example.asus.androidscruminftel.R;
 import com.example.asus.androidscruminftel.fragment.FragmentMyProyects;
 import com.example.asus.androidscruminftel.fragment.LoadingFragment;
 import com.example.asus.androidscruminftel.interfaces.ImageLoaderListener;
-import com.example.asus.androidscruminftel.interfaces.ServiceListener;
 import com.example.asus.androidscruminftel.interfaces.ServiceListenerProjects;
 import com.example.asus.androidscruminftel.model.Project;
 import com.example.asus.androidscruminftel.service.ImageLoaderService;
 import com.example.asus.androidscruminftel.service.ProyectsService;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
@@ -63,7 +58,7 @@ public class MyProjectsActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_proyects, loadingFragment).commit();
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -194,9 +189,6 @@ public class MyProjectsActivity extends AppCompatActivity
         if (id == R.id.new_project) {
             Intent intent = new Intent(this,NewProjectActivity.class);
             startActivity(intent);
-        } else if (id == R.id.projects) {
-            Intent intent = new Intent(this,ProjectsScrum.class);
-            startActivity(intent);
 
         }else if (id == R.id.chatlist) {
             Intent intent = new Intent(this,ListChatActivity.class);
@@ -215,6 +207,7 @@ public class MyProjectsActivity extends AppCompatActivity
 
             editor.putString("email", "");
             editor.putString("username", "");
+            editor.putString("image","");
             editor.commit();
 
             Intent logoutIntent = new Intent(this, LoginActivity.class);

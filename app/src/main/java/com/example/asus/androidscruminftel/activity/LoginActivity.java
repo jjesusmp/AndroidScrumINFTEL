@@ -1,22 +1,24 @@
-package com.example.asus.androidscruminftel;
+package com.example.asus.androidscruminftel.activity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.asus.androidscruminftel.AndroidScrumINFTELActivity;
+import com.example.asus.androidscruminftel.R;
+import com.example.asus.androidscruminftel.connection.PostHttp;
+import com.example.asus.androidscruminftel.model.User;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-
-import com.example.asus.androidscruminftel.model.User;
 
 public class LoginActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks,
@@ -36,9 +38,11 @@ public class LoginActivity extends AppCompatActivity implements
         sharedPref =  getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         String email = sharedPref.getString("email", "");
         String username = sharedPref.getString("username", "");
+        String image = sharedPref.getString("image","");
         if (!email.equals("")) {
             AndroidScrumINFTELActivity.getInstance().setEmail(email);
             AndroidScrumINFTELActivity.getInstance().setUserName(username);
+            AndroidScrumINFTELActivity.getInstance().setPhotoUrl(image);
 
             Intent intent = new Intent(this,MyProjectsActivity.class);
             startActivity(intent);
@@ -127,6 +131,12 @@ public class LoginActivity extends AppCompatActivity implements
 
             editor.putString("email", acct.getEmail());
             editor.putString("username", acct.getDisplayName());
+            if(acct.getPhotoUrl() == null){
+                editor.putString("image", "http://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png");
+            }else {
+
+                editor.putString("image",acct.getPhotoUrl().toString());
+            }
             editor.commit();
 
             new PostHttp(getBaseContext()).execute(stringUrl,userJson.toString());

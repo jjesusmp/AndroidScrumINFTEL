@@ -1,6 +1,8 @@
-package com.example.asus.androidscruminftel;
+package com.example.asus.androidscruminftel.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -9,12 +11,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.asus.androidscruminftel.AndroidScrumINFTELActivity;
+import com.example.asus.androidscruminftel.R;
 import com.example.asus.androidscruminftel.fragment.ListChatFragment;
 import com.example.asus.androidscruminftel.fragment.LoadingFragment;
 import com.example.asus.androidscruminftel.interfaces.ImageLoaderListener;
@@ -22,10 +25,10 @@ import com.example.asus.androidscruminftel.interfaces.ServiceListener;
 import com.example.asus.androidscruminftel.model.ProjectChat;
 import com.example.asus.androidscruminftel.service.ChatListService;
 import com.example.asus.androidscruminftel.service.ImageLoaderService;
+import com.google.android.gms.auth.api.Auth;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class ListChatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ServiceListener,ImageLoaderListener {
@@ -139,22 +142,43 @@ public class ListChatActivity extends AppCompatActivity implements NavigationVie
     }
 
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
+        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.new_project) {
             Intent intent = new Intent(this,NewProjectActivity.class);
             startActivity(intent);
         } else if (id == R.id.projects) {
-            Intent intent = new Intent(this,ProjectsScrum.class);
+            Intent intent = new Intent(this,MyProjectsActivity.class);
             startActivity(intent);
+
+
 
         }else if (id == R.id.exit) {
 
+
+            Auth.GoogleSignInApi.signOut(AndroidScrumINFTELActivity.getInstance().getmGoogleApiClient());
+
+            AndroidScrumINFTELActivity.getInstance().setUserName("");
+            AndroidScrumINFTELActivity.getInstance().setEmail("");
+
+            SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+
+            editor.putString("email", "");
+            editor.putString("username", "");
+            editor.putString("image","");
+            editor.commit();
+
+            Intent logoutIntent = new Intent(this, LoginActivity.class);
+            startActivity(logoutIntent);
+            finish();
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.coordinatorLayout);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

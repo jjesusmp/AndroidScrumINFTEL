@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">AndroidScrumINFTEL</string>
-    <string name="title_activity_my_projects">MyProjectsActivity</string>
+    <string name="title_activity_my_projects">Mis Proyectos</string>
+    <string name="title_activity_new_projects">Crear Proyecto</string>
+    <string name="title_activity_task">Nueva Tarea</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -33,6 +35,8 @@
     <string name="title_activity_my_proyect">MyProyect</string>
     <string name="title_activity_send">SendActivity</string>
     <string name="my_text">Eres un nuevo miembro del proyecto</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_download">Descargar</string>
 
     <string name="preference_file_key">SharedPreferences</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.example.asus.androidscruminftel.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,18 +7,15 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.asus.androidscruminftel.AndroidScrumINFTELActivity;
-import com.example.asus.androidscruminftel.MyProjectsActivity;
-import com.example.asus.androidscruminftel.ProjectsScrum;
 import com.example.asus.androidscruminftel.R;
+import com.example.asus.androidscruminftel.activity.MyProjectsActivity;
+import com.example.asus.androidscruminftel.activity.ProjectsScrum;
 import com.example.asus.androidscruminftel.adapter.RecyclerViewProyectsAdapter;
-import com.example.asus.androidscruminftel.interfaces.ServiceListener;
 import com.example.asus.androidscruminftel.interfaces.ServiceListenerProjects;
 import com.example.asus.androidscruminftel.model.Project;
 

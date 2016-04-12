@@ -6,7 +6,6 @@ import android.util.Pair;
 import com.example.asus.androidscruminftel.connection.HttpRequest;
 import com.example.asus.androidscruminftel.connection.HttpTask;
 import com.example.asus.androidscruminftel.interfaces.ResponseListener;
-import com.example.asus.androidscruminftel.interfaces.ServiceListener;
 import com.example.asus.androidscruminftel.interfaces.ServiceListenerProjects;
 import com.example.asus.androidscruminftel.model.Project;
 
